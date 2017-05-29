@@ -218,6 +218,8 @@ OPTION_RELWITHDEBINFO = has_option('relwithdebinfo')
 OPTION_QMAKE = option_value("qmake")
 OPTION_QT_VERSION = option_value("qt")
 OPTION_CMAKE = option_value("cmake")
+OPTION_CMAKE_PREFIX_PATH = option_value("cmake-prefix-path")
+OPTION_CMAKE_SYSTEM_IGNORE_PATH = option_value("cmake-system-ignore-path")
 OPTION_OPENSSL = option_value("openssl")
 OPTION_ONLYPACKAGE = has_option("only-package")
 OPTION_STANDALONE = has_option("standalone")
@@ -840,6 +842,8 @@ class pyside_build(_build):
             "-DQt5Help_DIR=%s" % self.qtinfo.docs_dir,
             "-DCMAKE_BUILD_TYPE=%s" % self.build_type,
             "-DCMAKE_INSTALL_PREFIX=%s" % self.install_dir,
+            "-DCMAKE_PREFIX_PATH=%s" % OPTION_CMAKE_PREFIX_PATH,
+            "-DCMAKE_SYSTEM_IGNORE_PATH=%s" % OPTION_CMAKE_SYSTEM_IGNORE_PATH,
             module_src_dir
         ]
         cmake_cmd.append("-DPYTHON_EXECUTABLE=%s" % self.py_executable)
@@ -1310,7 +1314,7 @@ setup(
     url = 'http://www.pyside.org',
     download_url = 'https://download.qt-project.org/official_releases/pyside2/',
     license = 'LGPL',
-    packages = ['PySide2', 'pyside2uic'],
+    packages = ['PySide2', 'pyside2uic', 'pyside2uic.Compiler', 'pyside2uic.port_v2' if sys.version_info < (3, 0) else 'pyside2uic.port_v3', 'pyside2uic.widget-plugins'],
     package_dir = {'': 'pyside_package'},
     include_package_data = True,
     zip_safe = False,
@@ -1319,6 +1323,7 @@ setup(
             'pyside2-uic = PySide2.scripts.uic:main',
         ]
     },
+    data_files=[("bin", ['pyside_package/PySide2/pyside2-rcc', 'pyside_package/PySide2/pyside2-lupdate', 'pyside_package/PySide2/shiboken2'])],
     cmdclass = {
         'build': pyside_build,
         'build_ext': pyside_build_ext,

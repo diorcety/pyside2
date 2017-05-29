@@ -1,11 +1,11 @@
 [submodule "sources/pyside2-tools"]
 	path = sources/pyside2-tools
 	branch = 5.9
-	url = ../pyside-tools.git
+	url = ../pyside2-tools.git
 [submodule "sources/pyside2-examples"]
 	path = sources/pyside2-examples
 	branch = 5.9
-	url = ../examples.git
+	url = ../pyside2-examples.git
 [submodule "wiki"]
 	path = wiki
 	url = https://github.com/PySide/pyside2.wiki.git

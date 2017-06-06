@@ -3,6 +3,9 @@ project(apiextractor)
 find_package(LibXml2 2.6.32)
 find_package(LibXslt 1.1.19)
 
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 option(DISABLE_DOCSTRINGS "Disable documentation extraction." FALSE)
 
 if (NOT DISABLE_DOCSTRINGS)

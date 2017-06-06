@@ -11,12 +11,21 @@ add_custom_target(qdoc3
 
 find_program(SPHINX_BUILD NAMES sphinx-build)
 if (${SPHINX_BUILD} MATCHES "SPHINX_BUILD-NOTFOUND")
-    message(FATAL_ERROR "sphinx-build command not found.")
-endif()
+    message("-- sphinx-build - not found! doc target disabled")
+else()
 add_custom_target(apidoc
                   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/rst
                   COMMAND ${SHIBOKEN_PYTHON_INTERPRETER} ${SPHINX_BUILD} -b html  ${CMAKE_CURRENT_BINARY_DIR}/rst html
                  )
+add_dependencies(apidoc docrsts)
+
+#install files
+add_custom_target(apidocinstall
+    COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/share/doc/PySide2-${BINDING_API_VERSION} && cp -rv ${CMAKE_CURRENT_BINARY_DIR}/html/* ${CMAKE_INSTALL_PREFIX}/share/doc/PySide-${BINDING_API_VERSION}
+)
+
+add_dependencies(apidocinstall apidoc)
+endif()
 
 # create conf.py based on conf.py.in
 configure_file("conf.py.in" "rst/conf.py" @ONLY)
@@ -37,7 +46,6 @@ add_custom_target("docrsts"
     WORKING_DIRECTORY ${${module}_SOURCE_DIR}
     COMMENT "Running generator to generate documentation..."
 )
-add_dependencies(apidoc docrsts)
 add_dependencies(docrsts qdoc3)
 
 # #create devhelp file
@@ -49,11 +57,5 @@ add_dependencies(docrsts qdoc3)
 #     COMMAND ${CMAKE_COMMAND} -E create_symlink "${CMAKE_INSTALL_PREFIX}/share/doc/${BINDING_NAME}/html" "${CMAKE_INSTALL_PREFIX}/share/devhelp/books/${BINDING_NAME}"
 # )
 
-#install files
-add_custom_target(apidocinstall
-    COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/share/doc/PySide2-${BINDING_API_VERSION} && cp -rv ${CMAKE_CURRENT_BINARY_DIR}/html/* ${CMAKE_INSTALL_PREFIX}/share/doc/PySide-${BINDING_API_VERSION}
-)
-
-add_dependencies(apidocinstall apidoc)
 # add_dependencies(apidocinstall apidevhelp)
 

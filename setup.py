@@ -1276,6 +1276,10 @@ try:
 except IOError:
     README = CHANGES = ''
 
+exe_ext = ''
+if sys.platform == "win32":
+    exe_ext = '.exe'
+
 
 setup(
     name = "PySide2",
@@ -1327,7 +1331,7 @@ setup(
             'pyside2-uic = PySide2.scripts.uic:main',
         ]
     },
-    data_files=[("bin", ['pyside_package/PySide2/pyside2-rcc', 'pyside_package/PySide2/pyside2-lupdate', 'pyside_package/PySide2/shiboken2'])],
+    data_files=[("bin", ['pyside_package/PySide2/pyside2-rcc' + exe_ext, 'pyside_package/PySide2/pyside2-lupdate' + exe_ext, 'pyside_package/PySide2/shiboken2' + exe_ext])],
     cmdclass = {
         'build': pyside_build,
         'build_ext': pyside_build_ext,

@@ -1160,62 +1160,6 @@ class pyside_build(_build):
                 pyside_rcc_options = '-py3'
                 regenerate_qt_resources(examples_path, pyside_rcc_path,
                     pyside_rcc_options)
-        # <ssl_libs>/* -> <setup>/PySide2/openssl
-        copydir("{ssl_libs_dir}", "{dist_dir}/PySide2/openssl",
-            filter=[
-                "libeay32.dll",
-                "ssleay32.dll"],
-            force=False, vars=vars)
-
-        # <qt>/bin/*.dll -> <setup>/PySide2
-        copydir("{qt_bin_dir}", "{dist_dir}/PySide2",
-            filter=[
-                "*.dll",
-                "designer.exe",
-                "linguist.exe",
-                "lrelease.exe",
-                "lupdate.exe",
-                "lconvert.exe"],
-            ignore=["*d4.dll"],
-            recursive=False, vars=vars)
-        if self.debug:
-            # <qt>/bin/*d4.dll -> <setup>/PySide2
-            copydir("{qt_bin_dir}", "{dist_dir}/PySide2",
-                filter=["*d4.dll"] + pdbs,
-                recursive=False, vars=vars)
-
-        if self.debug  or self.build_type == 'RelWithDebInfo':
-            # <qt>/lib/*.pdb -> <setup>/PySide2
-            copydir("{qt_lib_dir}", "{dist_dir}/PySide2",
-                filter=["*.pdb"],
-                recursive=False, vars=vars)
-
-        # I think these are the qt-mobility DLLs, at least some are,
-        # so let's copy them too
-        # <qt>/lib/*.dll -> <setup>/PySide2
-        copydir("{qt_lib_dir}", "{dist_dir}/PySide2",
-            filter=["*.dll"],
-            ignore=["*d?.dll"],
-            recursive=False, vars=vars)
-        if self.debug:
-            # <qt>/lib/*d4.dll -> <setup>/PySide2
-            copydir("{qt_lib_dir}", "{dist_dir}/PySide2",
-                filter=["*d?.dll"],
-                recursive=False, vars=vars)
-        if self.debug  or self.build_type == 'RelWithDebInfo':
-            # <qt>/lib/*pdb -> <setup>/PySide2
-            copydir("{qt_lib_dir}", "{dist_dir}/PySide2",
-                filter=pdbs,
-                recursive=False, vars=vars)
-
-        # <qt>/plugins/* -> <setup>/PySide2/plugins
-        copydir("{qt_plugins_dir}", "{dist_dir}/PySide2/plugins",
-            filter=["*.dll"] + pdbs,
-            vars=vars)
-        # <qt>/translations/* -> <setup>/PySide2/translations
-        copydir("{qt_translations_dir}", "{dist_dir}/PySide2/translations",
-            filter=["*.qm"],
-            vars=vars)
 
         # pdb files for libshiboken and libpyside
         if self.debug or self.build_type == 'RelWithDebInfo':

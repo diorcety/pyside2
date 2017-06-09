@@ -36,6 +36,7 @@ else()
     set(QML_PRIVATE_API_SUPPORT 0)
     set(QML_INCLUDES "")
     set(QML_LIBRARIES "")
+    set(QML_PRIVATE_API_SUPPORT 0)
 endif()
 
 qt5_wrap_cpp(DESTROYLISTENER_MOC "destroylistener.h")

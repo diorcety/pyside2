@@ -282,7 +282,7 @@ if not os.path.exists(OPTION_CMAKE):
 if sys.platform == "win32":
     if OPTION_MAKESPEC is None:
         OPTION_MAKESPEC = "msvc"
-    if not OPTION_MAKESPEC in ["msvc", "mingw"]:
+    if not OPTION_MAKESPEC in ["msvc", "mingw", "msys"]:
         print("Invalid option --make-spec. Available values are %s" % (["msvc", "mingw"]))
         sys.exit(1)
 else:
@@ -523,6 +523,9 @@ class pyside_build(_build):
             elif OPTION_MAKESPEC == "mingw":
                 make_name = "mingw32-make"
                 make_generator = "MinGW Makefiles"
+            elif OPTION_MAKESPEC == "msys":
+                make_name = "make"
+                make_generator = "MSYS Makefiles"
             else:
                 raise DistutilsSetupError(
                     "Invalid option --make-spec.")

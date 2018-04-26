@@ -642,14 +642,11 @@ class pyside_build(_build):
                             libs_tried.append(py_library)
 
             if not python_library_found:
-                raise DistutilsSetupError(
-                    "Failed to locate the Python library with %s" %
-                    ', '.join(libs_tried))
-
-            if py_library.endswith('.a'):
-                # Python was compiled as a static library
-                log.error("Failed to locate a dynamic Python library, using %s"
-                          % py_library)
+                py_library = None
+                if not sys.platform.startswith('linux'):
+                        raise DistutilsSetupError(
+                            "Failed to locate the Python library with %s" %
+                            ', '.join(libs_tried))
 
         self.qtinfo = QtInfo(QMAKE_COMMAND)
         qt_dir = os.path.dirname(OPTION_QMAKE)
@@ -835,7 +832,8 @@ class pyside_build(_build):
         ]
         cmake_cmd.append("-DPYTHON_EXECUTABLE=%s" % self.py_executable)
         cmake_cmd.append("-DPYTHON_INCLUDE_DIR=%s" % self.py_include_dir)
-        cmake_cmd.append("-DPYTHON_LIBRARY=%s" % self.py_library)
+        if self.py_library is not None:
+            cmake_cmd.append("-DPYTHON_LIBRARY=%s" % self.py_library)
         # Add source location for generating documentation
         if qtSrcDir:
             cmake_cmd.append("-DQT_SRC_DIR=%s" % qtSrcDir)
